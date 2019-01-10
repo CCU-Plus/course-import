@@ -1,0 +1,45 @@
+{
+  "name": "ccu-plus/course-import",
+  "description": "Provide artisan commands for core module to import course data to database from National Chung Cheng University.",
+  "keywords": [
+    "ccu-plus"
+  ],
+  "license": "AGPL",
+  "authors": [
+    {
+      "name": "BePsvPT",
+      "email": "bepsvpt@protonmail.com"
+    }
+  ],
+  "require": {
+    "php": "^7.3",
+    "guzzlehttp/guzzle": "^6.3",
+    "illuminate/support": "^5.7"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "7.5.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "CCUPLUS\\CourseImport\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "CCUPLUS\\CourseImport\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "CCUPLUS\\CourseImport\\CourseImportServiceProvider"
+      ]
+    }
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
