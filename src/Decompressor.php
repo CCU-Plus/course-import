@@ -48,7 +48,7 @@ class Decompressor
             throw $exception;
         } else if (!unlink($path)) {
             throw $exception;
-        } else if (!mkdir($exception)) {
+        } else if (!mkdir($path)) {
             throw $exception;
         };
 
