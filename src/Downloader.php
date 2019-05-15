@@ -30,8 +30,8 @@ class Downloader
     public function download(string $semester): string
     {
         $response = (new Client)->get(sprintf($this->url, $semester), [
-            'connect_timeout' => 2,
-            'timeout' => 20,
+            'connect_timeout' => 5,
+            'timeout' => 60,
         ]);
 
         $path = $this->tempfile();
