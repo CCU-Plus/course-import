@@ -1,9 +1,7 @@
 {
   "name": "ccu-plus/course-import",
   "description": "Provide artisan commands for core module to import course data to database from National Chung Cheng University.",
-  "keywords": [
-    "ccu-plus"
-  ],
+  "keywords": ["ccu-plus"],
   "license": "AGPL",
   "authors": [
     {
@@ -14,15 +12,22 @@
   "require": {
     "php": "^7.2",
     "ext-zlib": "*",
-    "guzzlehttp/guzzle": "6.3.*",
-    "illuminate/console": "6.2.*",
-    "illuminate/database": "6.2.*",
-    "illuminate/support": "6.2.*",
-    "paquettg/php-html-parser": "2.1.*"
+    "ccu-plus/eloquent-orm": "master",
+    "guzzlehttp/guzzle": "^6.3",
+    "illuminate/console": "^6.2",
+    "illuminate/database": "^6.2",
+    "illuminate/support": "^6.2",
+    "paquettg/php-html-parser": "^2.1"
   },
   "require-dev": {
-    "phpunit/phpunit": "8.4.*"
+    "phpunit/phpunit": "^8.4"
   },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/ccu-plus/eloquent-orm"
+    }
+  ],
   "autoload": {
     "psr-4": {
       "CCUPLUS\\CourseImport\\": "src/"
