@@ -4,7 +4,7 @@ namespace CCUPLUS\CourseImport;
 
 use Illuminate\Support\ServiceProvider;
 
-class CourseImportServiceProvider extends ServiceProvider
+class ServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.

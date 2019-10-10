@@ -41,7 +41,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "CCUPLUS\\CourseImport\\CourseImportServiceProvider"
+        "CCUPLUS\\CourseImport\\ServiceProvider"
       ]
     }
   },
