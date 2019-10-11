@@ -9,6 +9,7 @@ use CCUPLUS\EloquentORM\Dimension;
 use CCUPLUS\EloquentORM\Professor;
 use CCUPLUS\EloquentORM\Semester;
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class Import extends Command
@@ -181,17 +182,27 @@ class Import extends Command
      */
     protected function professors(array $departments): array
     {
-        $exists = Professor::all()->pluck('name')->flip()->toArray();
+        collect($departments)
+            ->pluck('courses')
+            ->collapse()
+            ->pluck('professor')
+            ->flatten()
+            ->unique()
+            ->values()
+            ->map(function (string $name) {
+                $map = [
+                    '李?玲' => '李䊵玲', // BIG-5 無「䊵」此字
+                ];
 
-        foreach ($departments as ['courses' => $courses]) {
-            foreach ($courses as ['professor' => $professor]) {
-                foreach ($professor as $name) {
-                    if (!isset($exists[$name])) {
-                        $exists[$name] = Professor::query()->insert(['name' => $name]);
-                    }
-                }
-            }
-        }
+                return $map[$name] ?? $name;
+            })
+            ->diff(Professor::all()->pluck('name')->toArray())
+            ->chunk(50)
+            ->each(function (Collection $names) {
+                Professor::query()->insert(array_map(function (string $name) {
+                    return ['name' => $name];
+                }, $names->values()->toArray()));
+            });
 
         return Professor::all()->pluck('id', 'name')->toArray();
     }
