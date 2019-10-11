@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ccu-plus/eloquent-orm.git",
-                "reference": "10017385f1b59992caa4a529fa59f6fb4b792f55"
+                "reference": "be30eb26e64f8d55382d295bb56ac3f951b6f5bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ccu-plus/eloquent-orm/zipball/10017385f1b59992caa4a529fa59f6fb4b792f55",
-                "reference": "10017385f1b59992caa4a529fa59f6fb4b792f55",
+                "url": "https://api.github.com/repos/ccu-plus/eloquent-orm/zipball/be30eb26e64f8d55382d295bb56ac3f951b6f5bf",
+                "reference": "be30eb26e64f8d55382d295bb56ac3f951b6f5bf",
                 "shasum": ""
             },
             "require": {
@@ -64,7 +64,7 @@
                 "source": "https://github.com/ccu-plus/eloquent-orm/tree/master",
                 "issues": "https://github.com/ccu-plus/eloquent-orm/issues"
             },
-            "time": "2019-10-11T08:15:30+00:00"
+            "time": "2019-10-11T13:56:38+00:00"
         },
         {
             "name": "doctrine/inflector",
