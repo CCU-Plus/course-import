@@ -3,10 +3,14 @@
 namespace CCUPLUS\CourseImport;
 
 use Illuminate\Support\Str;
+use InvalidArgumentException;
 use PHPHtmlParser\Dom;
 use PHPHtmlParser\Dom\Collection;
 use PHPHtmlParser\Dom\HtmlNode;
 use PHPHtmlParser\Exceptions\ChildNotFoundException;
+use PHPHtmlParser\Exceptions\CircularException;
+use PHPHtmlParser\Exceptions\NotLoadedException;
+use PHPHtmlParser\Exceptions\StrictException;
 
 class Parser
 {
@@ -23,6 +27,11 @@ class Parser
      * @param string $path
      *
      * @return array
+     *
+     * @throws ChildNotFoundException
+     * @throws CircularException
+     * @throws NotLoadedException
+     * @throws StrictException
      */
     public function parse(string $path): array
     {
@@ -41,12 +50,35 @@ class Parser
         }, array_shift($rows)->find('th')->toArray());
 
         return [
-            'code' => basename($path, '.html'),
+            'code' => $code = basename($path, '.html'),
+            'college' => $this->college($code),
             'name' => Str::after($dom->find('title', 0)->text(), '--'),
             'courses' => array_map(function (HtmlNode $row) {
                 return $this->rowToArray($row->find('td'));
             }, $rows),
         ];
+    }
+
+    /**
+     * 取得系所學院.
+     *
+     * @param string $code
+     *
+     * @return string
+     */
+    protected function college(string $code): string
+    {
+        $colleges = [
+            '1' => '文學院', '2' => '理學院', '3' => '社會科學學院', '4' => '工學院',
+            '5' => '管理學院', '6' => '法學院', '7' => '教育學院', 'F' => '其他',
+            'I' => '其他', 'V' => '其他', 'Z' => '其他',
+        ];
+
+        if (!isset($colleges[$code[0]])) {
+            throw new InvalidArgumentException(sprintf('未知系所：%s', $code));
+        }
+
+        return $colleges[$code[0]];
     }
 
     /**
