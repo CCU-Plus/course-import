@@ -29,14 +29,20 @@ class Downloader
      */
     public function download(string $semester): string
     {
-        $response = (new Client)->get(sprintf($this->url, $semester), [
-            'connect_timeout' => 5,
-            'timeout' => 60,
-        ]);
-
         $path = $this->tempfile();
 
-        file_put_contents($path, $response->getBody()->getContents());
+        $archive = realpath(sprintf('%s/../archives/%s.tgz', __DIR__, $semester));
+
+        if (is_file($archive)) {
+            copy($archive, $path);
+        } else {
+            $response = (new Client)->get(sprintf($this->url, $semester), [
+                'connect_timeout' => 5,
+                'timeout' => 60,
+            ]);
+
+            file_put_contents($path, $response->getBody()->getContents());
+        }
 
         return $path;
     }
