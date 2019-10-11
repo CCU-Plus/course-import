@@ -19,7 +19,7 @@ class Import extends Command
      *
      * @var string
      */
-    protected $signature = 'course:import {semester : 學期} {--force} {--dry-run}';
+    protected $signature = 'course:import {semester : 學期} {--force : 強制執行} {--dry-run : 顯示新增課程而不實際新增}';
 
     /**
      * The console command description.
@@ -44,7 +44,17 @@ class Import extends Command
     {
         parent::__construct();
 
+        Course::disableSearchSyncing();
+
         $this->importer = $importer;
+    }
+
+    /**
+     * Import destructor.
+     */
+    public function __destruct()
+    {
+        Course::enableSearchSyncing();
     }
 
     /**
@@ -62,44 +72,40 @@ class Import extends Command
 
         $departments = $this->departments($data);
 
-        $dimensions = Dimension::all();
+        $dimensions = Dimension::all()->pluck('id', 'name')->toArray();
 
         $professors = $this->professors($data);
 
         foreach ($data as $datum) {
-            foreach ($datum['courses'] as $course) {
-                /** @var Course $model */
+            foreach ($datum['courses'] as $info) {
+                if ($this->option('dry-run')) {
+                    $this->info(sprintf('新增 %s（%s） 課程', $info['name']['cht'], $info['code']));
 
-                $model = Course::query()->firstOrCreate(['code' => $course['code']], [
-                    'name' => $course['name']['cht'],
-                    'department_id' => $departments[$datum['code']],
-                    'dimension_id' => optional($dimensions->firstWhere('name', '=', $course['dimension'] ?? null))->getKey(),
-                ]);
-
-                if ($model->semesters->where('name', '=', $semester->name)->isEmpty()) {
-                    $model->semesters()->save($semester);
+                    continue;
                 }
 
-                foreach ($course['professor'] as $professor) {
-                    $exists = $model->professors()
-                        ->wherePivot('professor_id', '=', $professors[$professor])
-                        ->wherePivot('semester_id', '=', $semester->getKey())
-                        ->exists();
+                /** @var Course $course */
 
-                    if ($exists) {
-                        $model->professors()
-                            ->wherePivot('semester_id', '=', $semester->getKey())
-                            ->updateExistingPivot($professors[$professor], [
-                                'class' => $course['class'],
-                                'credit' => $course['credit'],
-                            ]);
-                    } else {
-                        $model->professors()
-                            ->attach($professors[$professor], [
-                                'semester_id' => $semester->getKey(),
-                                'class' => $course['class'],
-                                'credit' => $course['credit'],
-                            ]);
+                $course = Course::query()->firstOrCreate(['code' => $info['code']], [
+                    'name' => $info['name']['cht'],
+                    'credit' => $info['credit'],
+                    'department_id' => $departments[$datum['code']],
+                    'dimension_id' => $dimensions[$info['dimension'] ?? null] ?? null,
+                ]);
+
+                $course->semesters()->syncWithoutDetaching($semester);
+
+                foreach ($info['professor'] as $professor) {
+                    $attributes = [
+                        'course_id' => $course->getKey(),
+                        'professor_id' => $professors[$professor],
+                        'semester_id' => $semester->getKey(),
+                    ];
+
+                    $pivot = $course->professors()->newPivot();
+
+                    if (!$pivot->where($attributes)->exists()) {
+                        $pivot->insert($attributes);
                     }
                 }
             }
@@ -107,7 +113,7 @@ class Import extends Command
     }
 
     /**
-     * 取得學期 eloquent model.
+     * 取得學期 Eloquent Model.
      *
      * @return Semester|null
      */
@@ -141,32 +147,19 @@ class Import extends Command
      */
     protected function departments(array $departments): array
     {
-        $colleges = [
-            '1' => '文學院',
-            '2' => '理學院',
-            '3' => '社會科學學院',
-            '4' => '工學院',
-            '5' => '管理學院',
-            '6' => '法學院',
-            '7' => '教育學院',
-        ];
-
         $exists = Department::all();
 
-        foreach ($departments as ['name' => $name, 'code' => $code]) {
-            // 根據 code 第一碼判斷所屬學院
-            $college = $colleges[$code[0]] ?? '其他';
+        foreach ($departments as ['college' => $college, 'name' => $name, 'code' => $code]) {
+            $cdept = $exists->firstWhere('code', '=', $code);
 
-            $byCode = $exists->firstWhere('code', '=', $code);
+            $ndept = $exists->where('college', '=', $college)->firstWhere('name', '=', $name);
 
-            $byName = $exists->where('college', '=', $college)->firstWhere('name', '=', $name);
-
-            if (is_null($byCode) && is_null($byName)) { // 如果皆為 null，代表尚無此系所資料
+            if (is_null($cdept) && is_null($ndept)) { // 如果皆為 null，代表尚無此系所資料
                 Department::query()->create(compact('college', 'name', 'code'));
-            } else if (!is_null($byCode) && is_null($byName) ) { // 如果有 code 但名稱不存在，代表系所名稱變更
-                $byCode->update(compact('college', 'name'));
-            } else if (is_null($byCode) && !is_null($byName)) { // 如果名稱存在但 code 不存在，代表系所代碼變更
-                $byName->update(compact('code'));
+            } else if (!is_null($cdept) && is_null($ndept) ) { // 如果 code 存在但名稱不存在，代表系所名稱變更
+                $cdept->update(compact('college', 'name'));
+            } else if (is_null($cdept) && !is_null($ndept)) { // 如果名稱存在但 code 不存在，代表系所代碼變更
+                $ndept->update(compact('code'));
             }
         }
 
