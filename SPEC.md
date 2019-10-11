@@ -4,7 +4,7 @@ Provide artisan commands for core module to import course data to database from 
 
 ## Spec Version
 
-0.0.1 (2019/01/08)
+0.0.2 (2019/10/11)
 
 ## Command Spec
 
@@ -14,9 +14,9 @@ import course data to database, showing imported courses number when command exe
 
 #### command arguments
 
-|  field   |  type  | required | multiple |     default      | example |                   remark                    |
-| :------: | :----: | :------: | :------: | :--------------: | :-----: | :-----------------------------------------: |
-| semester | string |    -     |    ✓     | current semester |  1071   | semesters that will be imported to database |
+|  field   |  type  | required | example |                   remark                    |
+| :------: | :----: | :------: | :-----: | :-----------------------------------------: |
+| semester | string |    ✓     |  1071   | semesters that will be imported to database |
 
 #### command options
 
