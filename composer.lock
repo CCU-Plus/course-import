@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f320cf5bf226e711f13e8413c2c9577b",
+    "content-hash": "1fe582fd139655e7740dcc0641e811b7",
     "packages": [
         {
             "name": "ccu-plus/eloquent-orm",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ccu-plus/eloquent-orm.git",
-                "reference": "7151b3a05ee73138062654bea0307049c766d9ca"
+                "reference": "10017385f1b59992caa4a529fa59f6fb4b792f55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ccu-plus/eloquent-orm/zipball/7151b3a05ee73138062654bea0307049c766d9ca",
-                "reference": "7151b3a05ee73138062654bea0307049c766d9ca",
+                "url": "https://api.github.com/repos/ccu-plus/eloquent-orm/zipball/10017385f1b59992caa4a529fa59f6fb4b792f55",
+                "reference": "10017385f1b59992caa4a529fa59f6fb4b792f55",
                 "shasum": ""
             },
             "require": {
@@ -64,7 +64,7 @@
                 "source": "https://github.com/ccu-plus/eloquent-orm/tree/master",
                 "issues": "https://github.com/ccu-plus/eloquent-orm/issues"
             },
-            "time": "2019-10-10T15:44:19+00:00"
+            "time": "2019-10-11T08:15:30+00:00"
         },
         {
             "name": "doctrine/inflector",
