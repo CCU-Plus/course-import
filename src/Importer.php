@@ -54,7 +54,7 @@ class Importer
 
             if (!is_file($path)) {
                 continue;
-            } else if (Str::contains($file, ['I000', '1014', '3708', '7006', 'index', 'all', 'e.html'])) {
+            } else if (Str::contains($file, ['I000', '1014', '1406', '3708', '7006', 'index', 'all', 'e.html'])) {
                 unlink($path);
             } else if ($this->convert($path)) {
                 yield $path;
