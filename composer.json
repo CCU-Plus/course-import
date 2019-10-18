@@ -17,6 +17,7 @@
     "illuminate/console": "^6.2",
     "illuminate/database": "^6.2",
     "illuminate/support": "^6.2",
+    "overtrue/pinyin": "^4.0",
     "paquettg/php-html-parser": "^2.1"
   },
   "require-dev": {
