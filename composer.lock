@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9cc45f4131efe17e4b0a3253d83a5adf",
+    "content-hash": "cddde3fe094d7e1c405b5b78dc598012",
     "packages": [
         {
             "name": "ccu-plus/eloquent-orm",

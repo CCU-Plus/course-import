@@ -2,7 +2,7 @@
   "name": "ccu-plus/course-import",
   "description": "Provide artisan commands for core module to import course data to database from National Chung Cheng University.",
   "keywords": ["ccu-plus"],
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "AGPL-3.0-only",
   "authors": [
     {

@@ -4,4 +4,4 @@ Provide artisan commands for core module to import course data to database from 
 
 ## Version
 
-1.0.0
+1.0.1
